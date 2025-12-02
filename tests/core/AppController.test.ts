@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 // Note: AppController requires full WebGL context which is complex to mock.
 // These tests focus on interface behavior and skip WebGL-dependent functionality.

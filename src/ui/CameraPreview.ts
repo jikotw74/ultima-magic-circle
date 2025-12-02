@@ -1,3 +1,5 @@
+import type { GestureState } from '@/types';
+
 export class CameraPreview {
   private container: HTMLElement;
   private videoElement: HTMLVideoElement | null = null;
@@ -5,6 +7,8 @@ export class CameraPreview {
   private ctx: CanvasRenderingContext2D | null = null;
   private isVisible: boolean = true;
   private animationId: number | null = null;
+  private _gestureState: GestureState | null = null;
+  private _handsDetectedCount: number = 0;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -21,10 +25,22 @@ export class CameraPreview {
           </button>
         </div>
         <div class="camera-content">
-          <canvas class="camera-canvas"></canvas>
+          <div class="camera-canvas-wrapper">
+            <canvas class="camera-canvas"></canvas>
+            <div class="hand-detection-overlay">
+              <span class="hands-count">0</span>
+              <span class="hands-label">hands</span>
+            </div>
+          </div>
           <div class="camera-status">
             <span class="status-indicator"></span>
             <span class="status-text">Initializing...</span>
+          </div>
+          <div class="detection-feedback">
+            <div class="detection-item">
+              <span class="detection-label">Detection:</span>
+              <span class="detection-value" id="detection-status">Waiting...</span>
+            </div>
           </div>
         </div>
       </div>
@@ -128,7 +144,59 @@ export class CameraPreview {
     this.updateStatus('error', message);
   }
 
+  updateGestureState(state: GestureState): void {
+    this._gestureState = state;
+
+    // Count detected hands
+    let count = 0;
+    if (state.leftHand) count++;
+    if (state.rightHand) count++;
+    this._handsDetectedCount = count;
+
+    // Update hands count display
+    const handsCount = this.container.querySelector('.hands-count');
+    const handsLabel = this.container.querySelector('.hands-label');
+    if (handsCount) {
+      handsCount.textContent = String(count);
+      handsCount.className = `hands-count ${count > 0 ? 'detected' : ''}`;
+    }
+    if (handsLabel) {
+      handsLabel.textContent = count === 1 ? 'hand' : 'hands';
+    }
+
+    // Update detection status text
+    const detectionStatus = this.container.querySelector('#detection-status');
+    if (detectionStatus) {
+      if (count === 0) {
+        detectionStatus.textContent = 'No hands';
+        detectionStatus.className = 'detection-value no-detection';
+      } else if (count === 1) {
+        const hand = state.leftHand || state.rightHand;
+        const handStatus = hand?.isOpen ? 'Open' : hand?.isClosed ? 'Closed' : 'Partial';
+        detectionStatus.textContent = `1 hand (${handStatus})`;
+        detectionStatus.className = 'detection-value detecting';
+      } else {
+        detectionStatus.textContent = '2 hands detected!';
+        detectionStatus.className = 'detection-value full-detection';
+      }
+    }
+
+    // Update canvas wrapper border for visual feedback
+    const wrapper = this.container.querySelector('.camera-canvas-wrapper');
+    if (wrapper) {
+      wrapper.className = `camera-canvas-wrapper ${count > 0 ? 'hands-detected' : ''} ${count === 2 ? 'both-hands' : ''}`;
+    }
+  }
+
   dispose(): void {
     this.stopRendering();
+  }
+
+  getGestureState(): GestureState | null {
+    return this._gestureState;
+  }
+
+  getHandsDetectedCount(): number {
+    return this._handsDetectedCount;
   }
 }

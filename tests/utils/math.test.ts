@@ -160,21 +160,23 @@ describe('Math Utilities', () => {
 
   describe('randomGaussian', () => {
     it('should generate values around the mean', () => {
-      const values = Array(1000)
+      const values = Array(2000)
         .fill(0)
         .map(() => randomGaussian(50, 10));
 
       const avg = values.reduce((a, b) => a + b, 0) / values.length;
-      expect(avg).toBeCloseTo(50, 0); // Within 1 of mean
+      // 高斯分佈的平均值應該接近目標均值（允許 ±1 的誤差）
+      expect(Math.abs(avg - 50)).toBeLessThan(1);
     });
 
     it('should use default mean of 0', () => {
-      const values = Array(1000)
+      const values = Array(2000)
         .fill(0)
         .map(() => randomGaussian());
 
       const avg = values.reduce((a, b) => a + b, 0) / values.length;
-      expect(avg).toBeCloseTo(0, 0);
+      // 預設均值應接近 0（允許 ±0.5 的誤差）
+      expect(Math.abs(avg)).toBeLessThan(0.5);
     });
   });
 

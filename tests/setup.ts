@@ -268,20 +268,20 @@ HTMLCanvasElement.prototype.getContext = vi.fn((contextType: string) => {
 }) as unknown as typeof HTMLCanvasElement.prototype.getContext;
 
 // Mock requestAnimationFrame
-global.requestAnimationFrame = vi.fn((callback) => {
+globalThis.requestAnimationFrame = vi.fn((callback) => {
   return setTimeout(callback, 16) as unknown as number;
 });
 
-global.cancelAnimationFrame = vi.fn((id) => {
+globalThis.cancelAnimationFrame = vi.fn((id) => {
   clearTimeout(id);
 });
 
 // Mock ResizeObserver
-global.ResizeObserver = vi.fn().mockImplementation(() => ({
+globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
-}));
+})) as unknown as typeof ResizeObserver;
 
 // Mock MediaPipe Hands
 vi.mock('@mediapipe/hands', () => ({

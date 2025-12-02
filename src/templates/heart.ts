@@ -19,7 +19,6 @@ export function generateHeartPositions(count: number): Float32Array {
     const sinU = Math.sin(u);
     const cosU = Math.cos(u);
     const sinV = Math.sin(v);
-    const cosV = Math.cos(v);
 
     // Heart curve in 2D, extruded to 3D
     const heartX = 16 * Math.pow(sinU, 3);

@@ -1,0 +1,40 @@
+{
+  "name": "ultima-magic-circle",
+  "version": "1.0.0",
+  "description": "Real-time interactive 3D particle system controlled by hand gestures",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts,.tsx",
+    "deploy": "npm run build && gh-pages -d dist"
+  },
+  "keywords": [
+    "three.js",
+    "particles",
+    "hand-gesture",
+    "mediapipe",
+    "webgl",
+    "interactive"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@mediapipe/camera_utils": "^0.3.1675466862",
+    "@mediapipe/hands": "^0.4.1675469240",
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.160.0",
+    "@vitest/coverage-v8": "^1.1.0",
+    "gh-pages": "^6.1.0",
+    "happy-dom": "^12.10.3",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10",
+    "vitest": "^1.1.0"
+  }
+}

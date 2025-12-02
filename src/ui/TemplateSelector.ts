@@ -4,6 +4,7 @@ import { getAllTemplates } from '@/templates';
 export class TemplateSelector {
   private container: HTMLElement;
   private selectedTemplate: TemplateType = 'heart';
+  private isCollapsed: boolean = false;
   public onChange: TemplateChangeCallback | null = null;
 
   constructor(container: HTMLElement) {
@@ -15,9 +16,12 @@ export class TemplateSelector {
     const templates = getAllTemplates();
 
     this.container.innerHTML = `
-      <div class="template-selector">
-        <h3 class="panel-title">Templates</h3>
-        <div class="template-grid">
+      <div class="template-selector ${this.isCollapsed ? 'collapsed' : ''}">
+        <div class="panel-header" role="button" tabindex="0">
+          <h3 class="panel-title">Templates</h3>
+          <span class="collapse-icon">${this.isCollapsed ? '▶' : '▼'}</span>
+        </div>
+        <div class="panel-content template-grid">
           ${templates
             .map(
               (t) => `
@@ -36,7 +40,7 @@ export class TemplateSelector {
       </div>
     `;
 
-    // Add event listeners
+    // Add event listeners for template buttons
     const buttons = this.container.querySelectorAll('.template-btn');
     buttons.forEach((btn) => {
       btn.addEventListener('click', (e) => {
@@ -45,6 +49,32 @@ export class TemplateSelector {
         this.setTemplate(template);
       });
     });
+
+    // Add event listener for collapse toggle
+    const header = this.container.querySelector('.panel-header');
+    if (header) {
+      header.addEventListener('click', () => this.toggleCollapse());
+      header.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+          e.preventDefault();
+          this.toggleCollapse();
+        }
+      });
+    }
+  }
+
+  private toggleCollapse(): void {
+    this.isCollapsed = !this.isCollapsed;
+
+    const selector = this.container.querySelector('.template-selector');
+    if (selector) {
+      selector.classList.toggle('collapsed', this.isCollapsed);
+    }
+
+    const icon = this.container.querySelector('.collapse-icon');
+    if (icon) {
+      icon.textContent = this.isCollapsed ? '▶' : '▼';
+    }
   }
 
   setTemplate(template: TemplateType): void {

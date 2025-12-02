@@ -16,6 +16,7 @@ const PRESET_COLORS = [
 export class ColorPicker {
   private container: HTMLElement;
   private selectedColor: string = '#ff6b9d';
+  private isCollapsed: boolean = true; // 預設摺疊
   public onChange: ColorChangeCallback | null = null;
 
   constructor(container: HTMLElement) {
@@ -25,28 +26,36 @@ export class ColorPicker {
 
   private render(): void {
     this.container.innerHTML = `
-      <div class="color-picker">
-        <h3 class="panel-title">Color</h3>
-        <div class="color-presets">
-          ${PRESET_COLORS.map(
-            (color) => `
-            <button
-              class="color-preset ${color === this.selectedColor ? 'active' : ''}"
-              data-color="${color}"
-              style="background-color: ${color}"
-              title="${color}"
-            ></button>
-          `
-          ).join('')}
+      <div class="color-picker ${this.isCollapsed ? 'collapsed' : ''}">
+        <div class="panel-header" role="button" tabindex="0">
+          <h3 class="panel-title">Color</h3>
+          <div class="panel-header-right">
+            <span class="current-color-preview" style="background-color: ${this.selectedColor}"></span>
+            <span class="collapse-icon">${this.isCollapsed ? '▶' : '▼'}</span>
+          </div>
         </div>
-        <div class="color-custom">
-          <label for="custom-color">Custom:</label>
-          <input
-            type="color"
-            id="custom-color"
-            value="${this.selectedColor}"
-            class="color-input"
-          />
+        <div class="panel-content">
+          <div class="color-presets">
+            ${PRESET_COLORS.map(
+              (color) => `
+              <button
+                class="color-preset ${color === this.selectedColor ? 'active' : ''}"
+                data-color="${color}"
+                style="background-color: ${color}"
+                title="${color}"
+              ></button>
+            `
+            ).join('')}
+          </div>
+          <div class="color-custom">
+            <label for="custom-color">Custom:</label>
+            <input
+              type="color"
+              id="custom-color"
+              value="${this.selectedColor}"
+              class="color-input"
+            />
+          </div>
         </div>
       </div>
     `;
@@ -69,6 +78,32 @@ export class ColorPicker {
         this.setColor(target.value, false);
       });
     }
+
+    // Add event listener for collapse toggle
+    const header = this.container.querySelector('.panel-header');
+    if (header) {
+      header.addEventListener('click', () => this.toggleCollapse());
+      header.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+          e.preventDefault();
+          this.toggleCollapse();
+        }
+      });
+    }
+  }
+
+  private toggleCollapse(): void {
+    this.isCollapsed = !this.isCollapsed;
+
+    const picker = this.container.querySelector('.color-picker');
+    if (picker) {
+      picker.classList.toggle('collapsed', this.isCollapsed);
+    }
+
+    const icon = this.container.querySelector('.collapse-icon');
+    if (icon) {
+      icon.textContent = this.isCollapsed ? '▶' : '▼';
+    }
   }
 
   setColor(color: string, updateInput: boolean = true): void {
@@ -90,6 +125,12 @@ export class ColorPicker {
       if (customInput) {
         customInput.value = color;
       }
+    }
+
+    // Update header color preview
+    const colorPreview = this.container.querySelector('.current-color-preview') as HTMLElement;
+    if (colorPreview) {
+      colorPreview.style.backgroundColor = color;
     }
 
     // Notify callback

@@ -121,7 +121,61 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--text-secondary);
+  margin-bottom: 0;
+}
+
+/* Collapsible Panel Header */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px 0;
   margin-bottom: 12px;
+  user-select: none;
+  transition: opacity var(--transition-fast);
+}
+
+.panel-header:hover {
+  opacity: 0.8;
+}
+
+.panel-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.current-color-preview {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+}
+
+.collapse-icon {
+  font-size: 0.625rem;
+  color: var(--text-muted);
+  transition: transform var(--transition-fast);
+}
+
+/* Panel Content - Collapsible */
+.panel-content {
+  max-height: 500px;
+  overflow: hidden;
+  transition: max-height var(--transition-normal), opacity var(--transition-normal);
+  opacity: 1;
+}
+
+.template-selector.collapsed .panel-content,
+.color-picker.collapsed .panel-content {
+  max-height: 0;
+  opacity: 0;
+}
+
+.template-selector.collapsed .panel-header,
+.color-picker.collapsed .panel-header {
+  margin-bottom: 0;
 }
 
 /* Template Selector */
@@ -322,6 +376,98 @@ body {
 .status-text {
   font-size: 0.625rem;
   color: var(--text-secondary);
+}
+
+/* Camera Canvas Wrapper - for hand detection visual feedback */
+.camera-canvas-wrapper {
+  position: relative;
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.camera-canvas-wrapper.hands-detected {
+  border-color: #4ade80;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.3);
+}
+
+.camera-canvas-wrapper.both-hands {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 12px rgba(255, 107, 157, 0.4);
+}
+
+/* Hand Detection Overlay */
+.hand-detection-overlay {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hands-count {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+
+.hands-count.detected {
+  color: #4ade80;
+}
+
+.hands-label {
+  font-size: 0.5rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* Detection Feedback */
+.detection-feedback {
+  margin-top: 8px;
+  padding: 6px 8px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+}
+
+.detection-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.detection-label {
+  font-size: 0.625rem;
+  color: var(--text-muted);
+}
+
+.detection-value {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.detection-value.no-detection {
+  color: var(--text-muted);
+}
+
+.detection-value.detecting {
+  color: #4ade80;
+}
+
+.detection-value.full-detection {
+  color: var(--accent-primary);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
 }
 
 /* Gesture Indicator */

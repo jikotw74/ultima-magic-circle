@@ -145,8 +145,14 @@ class App {
   private startGesturePolling(): void {
     const poll = () => {
       const state = this.appController?.getGestureState();
-      if (state && this.gestureIndicator) {
-        this.gestureIndicator.update(state);
+      if (state) {
+        if (this.gestureIndicator) {
+          this.gestureIndicator.update(state);
+        }
+        // Also update camera preview with gesture state for iOS debugging
+        if (this.cameraPreview) {
+          this.cameraPreview.updateGestureState(state);
+        }
       }
       requestAnimationFrame(poll);
     };

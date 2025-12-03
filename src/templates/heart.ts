@@ -44,7 +44,7 @@ export function generateHeartPositions(count: number): Float32Array {
 
 export const heartTemplate: TemplateGenerator = {
   name: 'heart',
-  displayName: 'Heart',
+  displayName: '愛心',
   icon: '❤️',
   generate: generateHeartPositions,
   defaultCount: 4000,

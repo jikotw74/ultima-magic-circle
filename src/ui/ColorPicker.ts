@@ -28,7 +28,7 @@ export class ColorPicker {
     this.container.innerHTML = `
       <div class="color-picker ${this.isCollapsed ? 'collapsed' : ''}">
         <div class="panel-header" role="button" tabindex="0">
-          <h3 class="panel-title">Color</h3>
+          <h3 class="panel-title">顏色</h3>
           <div class="panel-header-right">
             <span class="current-color-preview" style="background-color: ${this.selectedColor}"></span>
             <span class="collapse-icon">${this.isCollapsed ? '▶' : '▼'}</span>
@@ -48,7 +48,7 @@ export class ColorPicker {
             ).join('')}
           </div>
           <div class="color-custom">
-            <label for="custom-color">Custom:</label>
+            <label for="custom-color">自訂：</label>
             <input
               type="color"
               id="custom-color"

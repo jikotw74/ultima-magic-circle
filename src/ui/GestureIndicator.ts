@@ -28,14 +28,14 @@ export class GestureIndicator {
         </div>
         <div class="gesture-metrics">
           <div class="metric">
-            <span class="metric-label">Tension</span>
+            <span class="metric-label">張力</span>
             <div class="metric-bar">
               <div class="metric-fill tension-fill"></div>
             </div>
             <span class="metric-value tension-value">0%</span>
           </div>
           <div class="metric">
-            <span class="metric-label">Expansion</span>
+            <span class="metric-label">擴張</span>
             <div class="metric-bar">
               <div class="metric-fill expansion-fill"></div>
             </div>
@@ -56,7 +56,7 @@ export class GestureIndicator {
       const status = leftHand.querySelector('.hand-status');
       if (status) {
         if (state.leftHand) {
-          status.textContent = state.leftHand.isOpen ? 'Open' : state.leftHand.isClosed ? 'Closed' : 'Partial';
+          status.textContent = state.leftHand.isOpen ? '張開' : state.leftHand.isClosed ? '握拳' : '部分';
         } else {
           status.textContent = '--';
         }
@@ -70,7 +70,7 @@ export class GestureIndicator {
       const status = rightHand.querySelector('.hand-status');
       if (status) {
         if (state.rightHand) {
-          status.textContent = state.rightHand.isOpen ? 'Open' : state.rightHand.isClosed ? 'Closed' : 'Partial';
+          status.textContent = state.rightHand.isOpen ? '張開' : state.rightHand.isClosed ? '握拳' : '部分';
         } else {
           status.textContent = '--';
         }

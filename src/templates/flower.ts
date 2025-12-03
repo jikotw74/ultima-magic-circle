@@ -63,7 +63,7 @@ export function generateFlowerPositions(count: number): Float32Array {
 
 export const flowerTemplate: TemplateGenerator = {
   name: 'flower',
-  displayName: 'Flower',
+  displayName: '花朵',
   icon: '🌸',
   generate: generateFlowerPositions,
   defaultCount: 5000,

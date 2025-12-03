@@ -24,34 +24,34 @@ export class CameraPreview {
     this.container.innerHTML = `
       <div class="camera-preview ${this.isVisible ? '' : 'hidden'}">
         <div class="camera-header">
-          <span class="camera-title">Camera</span>
-          <button class="camera-toggle" title="Toggle camera preview">
+          <span class="camera-title">攝影機</span>
+          <button class="camera-toggle" title="切換攝影機預覽">
             <span class="toggle-icon">${this.isVisible ? '👁️' : '👁️‍🗨️'}</span>
           </button>
         </div>
         <div class="camera-content">
           <div class="camera-start-prompt">
-            <button class="camera-start-btn" title="Start camera for hand gesture detection">
+            <button class="camera-start-btn" title="啟動攝影機進行手勢偵測">
               <span class="camera-icon">📷</span>
-              <span class="camera-start-text">Enable Camera</span>
+              <span class="camera-start-text">啟用攝影機</span>
             </button>
-            <p class="camera-hint">Click to enable hand gesture control</p>
+            <p class="camera-hint">點擊以啟用手勢控制</p>
           </div>
           <div class="camera-canvas-wrapper" style="display: none;">
             <canvas class="camera-canvas"></canvas>
             <div class="hand-detection-overlay">
               <span class="hands-count">0</span>
-              <span class="hands-label">hands</span>
+              <span class="hands-label">隻手</span>
             </div>
           </div>
           <div class="camera-status" style="display: none;">
             <span class="status-indicator"></span>
-            <span class="status-text">Initializing...</span>
+            <span class="status-text">初始化中...</span>
           </div>
           <div class="detection-feedback" style="display: none;">
             <div class="detection-item">
-              <span class="detection-label">Detection:</span>
-              <span class="detection-value" id="detection-status">Waiting...</span>
+              <span class="detection-label">偵測狀態：</span>
+              <span class="detection-value" id="detection-status">等待中...</span>
             </div>
           </div>
         </div>
@@ -86,7 +86,7 @@ export class CameraPreview {
 
     if (startBtn) {
       startBtn.disabled = true;
-      startBtn.querySelector('.camera-start-text')!.textContent = 'Starting...';
+      startBtn.querySelector('.camera-start-text')!.textContent = '啟動中...';
     }
 
     try {
@@ -99,12 +99,12 @@ export class CameraPreview {
       console.error('Failed to start camera:', error);
       if (startBtn) {
         startBtn.disabled = false;
-        startBtn.querySelector('.camera-start-text')!.textContent = 'Retry';
+        startBtn.querySelector('.camera-start-text')!.textContent = '重試';
       }
       if (startPrompt) {
         const hint = startPrompt.querySelector('.camera-hint');
         if (hint) {
-          hint.textContent = 'Camera access denied or unavailable. Please allow camera access and try again.';
+          hint.textContent = '攝影機存取被拒絕或無法使用。請允許攝影機存取後再試一次。';
           hint.classList.add('error');
         }
       }
@@ -126,7 +126,7 @@ export class CameraPreview {
   setVideoSource(video: HTMLVideoElement): void {
     this.videoElement = video;
     this.hasStartedStreaming = false;
-    this.updateStatus('inactive', 'Connecting...');
+    this.updateStatus('inactive', '連線中...');
     this.startRendering();
   }
 
@@ -147,7 +147,7 @@ export class CameraPreview {
           // Update status to active when video actually starts streaming
           if (!this.hasStartedStreaming) {
             this.hasStartedStreaming = true;
-            this.updateStatus('active', 'Camera active');
+            this.updateStatus('active', '攝影機啟用中');
           }
 
           // Mirror the video
@@ -241,22 +241,22 @@ export class CameraPreview {
       handsCount.className = `hands-count ${count > 0 ? 'detected' : ''}`;
     }
     if (handsLabel) {
-      handsLabel.textContent = count === 1 ? 'hand' : 'hands';
+      handsLabel.textContent = '隻手';
     }
 
     // Update detection status text
     const detectionStatus = this.container.querySelector('#detection-status');
     if (detectionStatus) {
       if (count === 0) {
-        detectionStatus.textContent = 'No hands';
+        detectionStatus.textContent = '未偵測到手';
         detectionStatus.className = 'detection-value no-detection';
       } else if (count === 1) {
         const hand = state.leftHand || state.rightHand;
-        const handStatus = hand?.isOpen ? 'Open' : hand?.isClosed ? 'Closed' : 'Partial';
-        detectionStatus.textContent = `1 hand (${handStatus})`;
+        const handStatus = hand?.isOpen ? '張開' : hand?.isClosed ? '握拳' : '部分';
+        detectionStatus.textContent = `偵測到 1 隻手 (${handStatus})`;
         detectionStatus.className = 'detection-value detecting';
       } else {
-        detectionStatus.textContent = '2 hands detected!';
+        detectionStatus.textContent = '偵測到 2 隻手！';
         detectionStatus.className = 'detection-value full-detection';
       }
     }

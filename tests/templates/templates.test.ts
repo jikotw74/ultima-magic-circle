@@ -8,14 +8,15 @@ import {
   saturnTemplate,
   buddhaTemplate,
   fireworksTemplate,
+  magicCircleTemplate,
 } from '@/templates';
 import type { TemplateType } from '@/types';
 
 describe('Templates', () => {
   describe('getAllTemplates', () => {
-    it('should return all 5 templates', () => {
+    it('should return all 6 templates', () => {
       const templates = getAllTemplates();
-      expect(templates).toHaveLength(5);
+      expect(templates).toHaveLength(6);
     });
 
     it('should include all required template types', () => {
@@ -27,6 +28,7 @@ describe('Templates', () => {
       expect(names).toContain('saturn');
       expect(names).toContain('buddha');
       expect(names).toContain('fireworks');
+      expect(names).toContain('magicCircle');
     });
   });
 
@@ -37,11 +39,12 @@ describe('Templates', () => {
       expect(getTemplate('saturn')).toBe(saturnTemplate);
       expect(getTemplate('buddha')).toBe(buddhaTemplate);
       expect(getTemplate('fireworks')).toBe(fireworksTemplate);
+      expect(getTemplate('magicCircle')).toBe(magicCircleTemplate);
     });
   });
 
   describe('generatePositions', () => {
-    const templateTypes: TemplateType[] = ['heart', 'flower', 'saturn', 'buddha', 'fireworks'];
+    const templateTypes: TemplateType[] = ['heart', 'flower', 'saturn', 'buddha', 'fireworks', 'magicCircle'];
 
     templateTypes.forEach((type) => {
       describe(type, () => {
@@ -237,6 +240,87 @@ describe('Templates', () => {
         (count) => count > 50
       );
       expect(significantCenters.length).toBeGreaterThanOrEqual(2);
+    });
+  });
+
+  describe('magicCircleTemplate', () => {
+    it('should have correct metadata', () => {
+      expect(magicCircleTemplate.name).toBe('magicCircle');
+      expect(magicCircleTemplate.displayName).toBe('魔法陣');
+      expect(magicCircleTemplate.icon).toBe('🔮');
+      expect(magicCircleTemplate.defaultCount).toBeGreaterThan(0);
+    });
+
+    it('should generate circular ring structure', () => {
+      const positions = magicCircleTemplate.generate(1000);
+
+      // 魔法陣主要是平面結構，Y 值應該很小
+      let flatParticles = 0;
+
+      for (let i = 0; i < 1000; i++) {
+        const y = positions[i * 3 + 1];
+        // 平面粒子 Y 值在 -0.2 到 0.2 之間
+        if (Math.abs(y) < 0.2) {
+          flatParticles++;
+        }
+      }
+
+      // 大部分粒子應該在平面上（至少 80%）
+      expect(flatParticles).toBeGreaterThan(800);
+    });
+
+    it('should generate radially symmetric distribution', () => {
+      const positions = magicCircleTemplate.generate(1000);
+
+      // 檢查徑向分佈
+      let quadrant1 = 0, quadrant2 = 0, quadrant3 = 0, quadrant4 = 0;
+
+      for (let i = 0; i < 1000; i++) {
+        const x = positions[i * 3];
+        const z = positions[i * 3 + 2];
+
+        if (x >= 0 && z >= 0) quadrant1++;
+        else if (x < 0 && z >= 0) quadrant2++;
+        else if (x < 0 && z < 0) quadrant3++;
+        else quadrant4++;
+      }
+
+      // 四個象限應該大致相等分佈
+      const avg = 250;
+      const tolerance = 150;
+
+      expect(Math.abs(quadrant1 - avg)).toBeLessThan(tolerance);
+      expect(Math.abs(quadrant2 - avg)).toBeLessThan(tolerance);
+      expect(Math.abs(quadrant3 - avg)).toBeLessThan(tolerance);
+      expect(Math.abs(quadrant4 - avg)).toBeLessThan(tolerance);
+    });
+
+    it('should have multiple ring layers', () => {
+      const positions = magicCircleTemplate.generate(2000);
+
+      // 計算不同半徑範圍的粒子數量
+      const innerRing: number[] = []; // 0 - 0.4
+      const middleRing: number[] = []; // 0.4 - 0.8
+      const outerRing: number[] = []; // 0.8 - 1.5
+
+      for (let i = 0; i < 2000; i++) {
+        const x = positions[i * 3];
+        const z = positions[i * 3 + 2];
+        const radius = Math.sqrt(x * x + z * z);
+
+        if (radius < 0.4) {
+          innerRing.push(radius);
+        } else if (radius < 0.8) {
+          middleRing.push(radius);
+        } else {
+          outerRing.push(radius);
+        }
+      }
+
+      // 每個環都應該有粒子
+      expect(innerRing.length).toBeGreaterThan(100);
+      expect(middleRing.length).toBeGreaterThan(100);
+      expect(outerRing.length).toBeGreaterThan(100);
     });
   });
 });

@@ -50,6 +50,7 @@ export class GestureController {
       tension: 0,
       expansion: 0,
       isActive: false,
+      hasOkSign: false,
     };
 
     this.currentState = { ...emptyState };
@@ -144,6 +145,7 @@ export class GestureController {
       tension: 0,
       expansion: 0,
       isActive: false,
+      hasOkSign: false,
     };
   }
 
@@ -170,6 +172,7 @@ export class GestureController {
           this.smoothing
         ),
         isActive: false,
+        hasOkSign: false,
       };
     } else {
       // Process detected hands
@@ -194,6 +197,7 @@ export class GestureController {
       const handsDistance = this.calculateHandsDistance(leftHand, rightHand);
       const tension = this.calculateTension(leftHand, rightHand);
       const expansion = this.calculateExpansion(handsDistance);
+      const hasOkSign = (leftHand?.isOkSign ?? false) || (rightHand?.isOkSign ?? false);
 
       this.currentState = {
         leftHand,
@@ -214,6 +218,7 @@ export class GestureController {
           this.smoothing
         ),
         isActive: leftHand !== null || rightHand !== null,
+        hasOkSign,
       };
     }
 
@@ -234,6 +239,7 @@ export class GestureController {
     const openness = this.calculateOpenness(landmarks);
     const isOpen = openness > 0.6;
     const isClosed = openness < 0.3;
+    const isOkSign = this.detectOkSign(landmarks);
     const center = calculateCenter(landmarks);
 
     return {
@@ -241,9 +247,52 @@ export class GestureController {
       landmarks,
       isOpen,
       isClosed,
+      isOkSign,
       openness,
       center,
     };
+  }
+
+  /**
+   * 偵測 OK 手勢
+   * OK 手勢的特徵：大拇指和食指尖端接觸形成圓圈，其他手指伸展
+   */
+  private detectOkSign(landmarks: HandLandmark[]): boolean {
+    const thumbTip = landmarks[THUMB_TIP];
+    const indexTip = landmarks[INDEX_TIP];
+    const middleTip = landmarks[MIDDLE_TIP];
+    const ringTip = landmarks[RING_TIP];
+    const pinkyTip = landmarks[PINKY_TIP];
+    const wrist = landmarks[WRIST];
+
+    // 1. 大拇指和食指尖端必須非常接近
+    const thumbIndexDistance = distance2D(
+      thumbTip.x, thumbTip.y,
+      indexTip.x, indexTip.y
+    );
+
+    // 閾值：當大拇指和食指接觸時，距離約 0.05 以內
+    if (thumbIndexDistance > 0.08) {
+      return false;
+    }
+
+    // 2. 其他三指（中指、無名指、小指）必須相對伸展
+    // 計算這些手指尖端到手腕的距離
+    const middleToWrist = distance2D(middleTip.x, middleTip.y, wrist.x, wrist.y);
+    const ringToWrist = distance2D(ringTip.x, ringTip.y, wrist.x, wrist.y);
+    const pinkyToWrist = distance2D(pinkyTip.x, pinkyTip.y, wrist.x, wrist.y);
+
+    // 伸展的手指到手腕的距離應該較大（約 0.2 以上）
+    const extendedThreshold = 0.15;
+    const isMiddleExtended = middleToWrist > extendedThreshold;
+    const isRingExtended = ringToWrist > extendedThreshold;
+    const isPinkyExtended = pinkyToWrist > extendedThreshold;
+
+    // 至少兩根手指需要伸展（允許一些自然變化）
+    const extendedCount = [isMiddleExtended, isRingExtended, isPinkyExtended]
+      .filter(Boolean).length;
+
+    return extendedCount >= 2;
   }
 
   private calculateOpenness(landmarks: HandLandmark[]): number {

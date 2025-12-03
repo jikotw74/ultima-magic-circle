@@ -140,6 +140,7 @@ export class AppController {
       // Gradually return to default state
       this.particleSystem.setScale(1.0);
       this.particleSystem.setExpansion(0);
+      this.particleSystem.setGlowIntensity(0.5);
       return;
     }
 
@@ -150,9 +151,15 @@ export class AppController {
     // Map expansion to particle spread
     this.particleSystem.setExpansion(state.expansion * 1.5);
 
-    // Adjust glow based on tension
-    const glowIntensity = 0.5 + state.tension * 0.8;
-    this.particleSystem.setGlowIntensity(glowIntensity);
+    // OK 手勢觸發強烈發亮效果
+    if (state.hasOkSign) {
+      // OK 手勢時發出強烈光芒
+      this.particleSystem.setGlowIntensity(2.0);
+    } else {
+      // 一般情況根據張力調整發光
+      const glowIntensity = 0.5 + state.tension * 0.8;
+      this.particleSystem.setGlowIntensity(glowIntensity);
+    }
   }
 
   private handleResize(): void {

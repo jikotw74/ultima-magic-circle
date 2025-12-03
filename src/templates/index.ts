@@ -4,6 +4,7 @@ import { flowerTemplate } from './flower';
 import { saturnTemplate } from './saturn';
 import { buddhaTemplate } from './buddha';
 import { fireworksTemplate } from './fireworks';
+import { magicCircleTemplate } from './magic-circle';
 
 export const templates: Record<TemplateType, TemplateGenerator> = {
   heart: heartTemplate,
@@ -11,6 +12,7 @@ export const templates: Record<TemplateType, TemplateGenerator> = {
   saturn: saturnTemplate,
   buddha: buddhaTemplate,
   fireworks: fireworksTemplate,
+  magicCircle: magicCircleTemplate,
 };
 
 export function getTemplate(type: TemplateType): TemplateGenerator {
@@ -26,4 +28,4 @@ export function getAllTemplates(): TemplateGenerator[] {
   return Object.values(templates);
 }
 
-export { heartTemplate, flowerTemplate, saturnTemplate, buddhaTemplate, fireworksTemplate };
+export { heartTemplate, flowerTemplate, saturnTemplate, buddhaTemplate, fireworksTemplate, magicCircleTemplate };

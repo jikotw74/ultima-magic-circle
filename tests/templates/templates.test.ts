@@ -251,16 +251,16 @@ describe('Templates', () => {
       expect(magicCircleTemplate.defaultCount).toBeGreaterThan(0);
     });
 
-    it('should generate circular ring structure', () => {
+    it('should generate circular ring structure facing screen', () => {
       const positions = magicCircleTemplate.generate(1000);
 
-      // 魔法陣主要是平面結構，Y 值應該很小
+      // 魔法陣面向螢幕，Z 值應該很小（深度變化小）
       let flatParticles = 0;
 
       for (let i = 0; i < 1000; i++) {
-        const y = positions[i * 3 + 1];
-        // 平面粒子 Y 值在 -0.2 到 0.2 之間
-        if (Math.abs(y) < 0.2) {
+        const z = positions[i * 3 + 2];
+        // 平面粒子 Z 值在 -0.2 到 0.2 之間
+        if (Math.abs(z) < 0.2) {
           flatParticles++;
         }
       }
@@ -272,16 +272,16 @@ describe('Templates', () => {
     it('should generate radially symmetric distribution', () => {
       const positions = magicCircleTemplate.generate(1000);
 
-      // 檢查徑向分佈
+      // 檢查 X-Y 平面的徑向分佈
       let quadrant1 = 0, quadrant2 = 0, quadrant3 = 0, quadrant4 = 0;
 
       for (let i = 0; i < 1000; i++) {
         const x = positions[i * 3];
-        const z = positions[i * 3 + 2];
+        const y = positions[i * 3 + 1];
 
-        if (x >= 0 && z >= 0) quadrant1++;
-        else if (x < 0 && z >= 0) quadrant2++;
-        else if (x < 0 && z < 0) quadrant3++;
+        if (x >= 0 && y >= 0) quadrant1++;
+        else if (x < 0 && y >= 0) quadrant2++;
+        else if (x < 0 && y < 0) quadrant3++;
         else quadrant4++;
       }
 
@@ -298,15 +298,15 @@ describe('Templates', () => {
     it('should have multiple ring layers', () => {
       const positions = magicCircleTemplate.generate(2000);
 
-      // 計算不同半徑範圍的粒子數量
+      // 計算不同半徑範圍的粒子數量 (X-Y 平面)
       const innerRing: number[] = []; // 0 - 0.4
       const middleRing: number[] = []; // 0.4 - 0.8
       const outerRing: number[] = []; // 0.8 - 1.5
 
       for (let i = 0; i < 2000; i++) {
         const x = positions[i * 3];
-        const z = positions[i * 3 + 2];
-        const radius = Math.sqrt(x * x + z * z);
+        const y = positions[i * 3 + 1];
+        const radius = Math.sqrt(x * x + y * y);
 
         if (radius < 0.4) {
           innerRing.push(radius);

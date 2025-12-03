@@ -82,7 +82,7 @@ describe('Templates', () => {
   describe('heartTemplate', () => {
     it('should have correct metadata', () => {
       expect(heartTemplate.name).toBe('heart');
-      expect(heartTemplate.displayName).toBe('Heart');
+      expect(heartTemplate.displayName).toBe('愛心');
       expect(heartTemplate.icon).toBe('❤️');
       expect(heartTemplate.defaultCount).toBeGreaterThan(0);
     });
@@ -108,7 +108,7 @@ describe('Templates', () => {
   describe('flowerTemplate', () => {
     it('should have correct metadata', () => {
       expect(flowerTemplate.name).toBe('flower');
-      expect(flowerTemplate.displayName).toBe('Flower');
+      expect(flowerTemplate.displayName).toBe('花朵');
       expect(flowerTemplate.icon).toBe('🌸');
       expect(flowerTemplate.defaultCount).toBeGreaterThan(0);
     });
@@ -143,7 +143,7 @@ describe('Templates', () => {
   describe('saturnTemplate', () => {
     it('should have correct metadata', () => {
       expect(saturnTemplate.name).toBe('saturn');
-      expect(saturnTemplate.displayName).toBe('Saturn');
+      expect(saturnTemplate.displayName).toBe('土星');
       expect(saturnTemplate.icon).toBe('🪐');
       expect(saturnTemplate.defaultCount).toBeGreaterThan(0);
     });
@@ -180,7 +180,7 @@ describe('Templates', () => {
   describe('buddhaTemplate', () => {
     it('should have correct metadata', () => {
       expect(buddhaTemplate.name).toBe('buddha');
-      expect(buddhaTemplate.displayName).toBe('Buddha');
+      expect(buddhaTemplate.displayName).toBe('佛像');
       expect(buddhaTemplate.icon).toBe('🧘');
       expect(buddhaTemplate.defaultCount).toBeGreaterThan(0);
     });
@@ -213,7 +213,7 @@ describe('Templates', () => {
   describe('fireworksTemplate', () => {
     it('should have correct metadata', () => {
       expect(fireworksTemplate.name).toBe('fireworks');
-      expect(fireworksTemplate.displayName).toBe('Fireworks');
+      expect(fireworksTemplate.displayName).toBe('煙火');
       expect(fireworksTemplate.icon).toBe('🎆');
       expect(fireworksTemplate.defaultCount).toBeGreaterThan(0);
     });

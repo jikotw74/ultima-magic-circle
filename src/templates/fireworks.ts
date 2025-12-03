@@ -88,7 +88,7 @@ export function generateFireworksPositions(count: number): Float32Array {
 
 export const fireworksTemplate: TemplateGenerator = {
   name: 'fireworks',
-  displayName: 'Fireworks',
+  displayName: '煙火',
   icon: '🎆',
   generate: generateFireworksPositions,
   defaultCount: 4000,

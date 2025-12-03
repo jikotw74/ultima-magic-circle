@@ -98,7 +98,7 @@ export function generateBuddhaPositions(count: number): Float32Array {
 
 export const buddhaTemplate: TemplateGenerator = {
   name: 'buddha',
-  displayName: 'Buddha',
+  displayName: '佛像',
   icon: '🧘',
   generate: generateBuddhaPositions,
   defaultCount: 7000,

@@ -76,7 +76,7 @@ export function generateSaturnPositions(count: number): Float32Array {
 
 export const saturnTemplate: TemplateGenerator = {
   name: 'saturn',
-  displayName: 'Saturn',
+  displayName: '土星',
   icon: '🪐',
   generate: generateSaturnPositions,
   defaultCount: 6000,

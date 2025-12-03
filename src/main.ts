@@ -62,7 +62,7 @@ class App {
       <div class="ui-overlay">
         <header class="header">
           <h1>Ultima Magic Circle</h1>
-          <p>Control particles with your hands</p>
+          <p>用雙手控制粒子</p>
         </header>
 
         <div class="control-panel">
@@ -76,12 +76,12 @@ class App {
 
         <div class="instructions">
           <div class="instructions-panel">
-            <h3>How to use</h3>
+            <h3>使用方式</h3>
             <ul>
-              <li>Show your hands to the camera</li>
-              <li>Close fists to increase tension/scale</li>
-              <li>Move hands apart to expand particles</li>
-              <li>Select different templates above</li>
+              <li>將雙手展示在攝影機前</li>
+              <li>握拳可增加張力/縮放</li>
+              <li>雙手分開可擴張粒子</li>
+              <li>點擊上方選擇不同模板</li>
             </ul>
           </div>
         </div>
@@ -89,7 +89,7 @@ class App {
 
       <div class="loading-screen" id="loading">
         <div class="loading-spinner"></div>
-        <p class="loading-text">Loading...</p>
+        <p class="loading-text">載入中...</p>
       </div>
     `;
   }

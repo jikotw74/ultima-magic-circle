@@ -1,77 +1,77 @@
 # Ultima Magic Circle
 
-Real-time interactive 3D particle system controlled by hand gestures using Three.js and MediaPipe.
+使用 Three.js 和 MediaPipe 的即時互動式 3D 粒子系統，透過手勢控制。
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node](https://img.shields.io/badge/node-%3E%3D18-green.svg)
 
-## Features
+## 功能特色
 
-- **Hand Gesture Control**: Use your hands to control particle scaling and expansion through webcam detection
-- **Multiple Templates**: Choose from 5 beautiful particle formations:
-  - ❤️ Heart
-  - 🌸 Flower
-  - 🪐 Saturn
-  - 🧘 Buddha
-  - 🎆 Fireworks
-- **Color Customization**: Pick any color or use preset palettes
-- **Real-time Response**: Particles respond instantly to gesture changes
-- **Modern UI**: Clean, minimalist interface with glassmorphism design
+- **手勢控制**：透過網路攝影機偵測，使用雙手控制粒子的縮放和擴張
+- **多種模板**：可選擇 5 種精美的粒子造型：
+  - ❤️ 愛心
+  - 🌸 花朵
+  - 🪐 土星
+  - 🧘 佛像
+  - 🎆 煙火
+- **顏色自訂**：選擇任意顏色或使用預設色盤
+- **即時回應**：粒子立即回應手勢變化
+- **現代化介面**：簡潔的毛玻璃風格設計
 
-## Demo
+## 展示
 
-Visit the live demo: [Ultima Magic Circle](https://[username].github.io/ultima-magic-circle/)
+前往線上展示：[Ultima Magic Circle](https://[username].github.io/ultima-magic-circle/)
 
-## Getting Started
+## 快速開始
 
-### Prerequisites
+### 系統需求
 
 - Node.js >= 18
-- Modern browser with WebGL support
-- Webcam (for gesture control)
+- 支援 WebGL 的現代瀏覽器
+- 網路攝影機（用於手勢控制）
 
-### Installation
+### 安裝
 
 ```bash
-# Clone the repository
+# 複製專案
 git clone https://github.com/[username]/ultima-magic-circle.git
 cd ultima-magic-circle
 
-# Install dependencies
+# 安裝依賴套件
 npm install
 
-# Start development server
+# 啟動開發伺服器
 npm run dev
 ```
 
-### Build
+### 建置
 
 ```bash
-# Build for production
+# 建置正式版本
 npm run build
 
-# Preview production build
+# 預覽正式版本
 npm run preview
 ```
 
-## Usage
+## 使用方式
 
-1. **Allow Camera Access**: When prompted, allow the browser to access your webcam
-2. **Show Your Hands**: Position your hands in front of the camera
-3. **Control Particles**:
-   - **Close fists** → Increase tension/scale
-   - **Open hands** → Decrease tension
-   - **Move hands apart** → Expand particles
-   - **Move hands together** → Contract particles
-4. **Change Templates**: Click on template icons to switch particle shapes
-5. **Change Colors**: Use the color picker or presets to customize particle colors
+1. **允許攝影機存取**：當瀏覽器提示時，允許存取您的網路攝影機
+2. **展示雙手**：將雙手放在攝影機前方
+3. **控制粒子**：
+   - **握拳** → 增加張力/縮放
+   - **張開手掌** → 減少張力
+   - **雙手分開** → 擴張粒子
+   - **雙手靠近** → 收縮粒子
+4. **切換模板**：點擊模板圖示切換粒子形狀
+5. **更換顏色**：使用顏色選擇器或預設色盤自訂粒子顏色
 
-## Project Structure
+## 專案結構
 
 ```
 ultima-magic-circle/
 ├── docs/
-│   └── SDD.md              # Software Design Document
+│   └── SDD.md              # 軟體設計文件
 ├── src/
 │   ├── core/
 │   │   ├── AppController.ts
@@ -103,89 +103,89 @@ ultima-magic-circle/
 └── package.json
 ```
 
-## Development
+## 開發
 
-### Tech Stack
+### 技術架構
 
-- **Three.js** - 3D rendering
-- **MediaPipe Hands** - Hand detection
-- **TypeScript** - Type safety
-- **Vite** - Build tool
-- **Vitest** - Testing framework
+- **Three.js** - 3D 渲染
+- **MediaPipe Hands** - 手部偵測
+- **TypeScript** - 型別安全
+- **Vite** - 建置工具
+- **Vitest** - 測試框架
 
-### Scripts
+### 指令
 
-| Command | Description |
+| 指令 | 說明 |
 |---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run test` | Run tests in watch mode |
-| `npm run test:run` | Run tests once |
-| `npm run test:coverage` | Run tests with coverage |
+| `npm run dev` | 啟動開發伺服器 |
+| `npm run build` | 建置正式版本 |
+| `npm run preview` | 預覽正式版本 |
+| `npm run test` | 執行測試（監看模式） |
+| `npm run test:run` | 執行測試（單次） |
+| `npm run test:coverage` | 執行測試（含覆蓋率） |
 
-### Testing
+### 測試
 
-This project follows TDD (Test-Driven Development) principles. Run tests:
+本專案遵循 TDD（測試驅動開發）原則。執行測試：
 
 ```bash
-# Watch mode
+# 監看模式
 npm run test
 
-# Single run
+# 單次執行
 npm run test:run
 
-# With coverage
+# 含覆蓋率
 npm run test:coverage
 ```
 
-## Architecture
+## 架構
 
-See [Software Design Document](docs/SDD.md) for detailed architecture and specifications.
+詳細架構與規格請參閱[軟體設計文件](docs/SDD.md)。
 
-### Key Components
+### 核心元件
 
-1. **GestureController**: Handles MediaPipe hand detection and gesture recognition
-2. **ParticleSystem**: Manages Three.js particle rendering and animations
-3. **AppController**: Orchestrates the application, connecting gesture input to particle output
-4. **Templates**: Generate 3D particle positions for different shapes
+1. **GestureController**：處理 MediaPipe 手部偵測與手勢辨識
+2. **ParticleSystem**：管理 Three.js 粒子渲染與動畫
+3. **AppController**：協調應用程式，連結手勢輸入與粒子輸出
+4. **Templates**：產生各種形狀的 3D 粒子位置
 
-### Gesture Recognition
+### 手勢辨識
 
-- **Openness**: Calculated from fingertip-to-palm distances
-- **Tension**: Inverse of average hand openness (closed = high tension)
-- **Expansion**: Distance between left and right hand centers
+- **張開度**：根據指尖到掌心的距離計算
+- **張力**：手部平均張開度的反向值（握拳 = 高張力）
+- **擴張**：左右手中心點之間的距離
 
-## Browser Support
+## 瀏覽器支援
 
 - Chrome 80+
 - Firefox 75+
 - Safari 14+
 - Edge 80+
 
-## Performance
+## 效能
 
-| Metric | Target |
+| 指標 | 目標 |
 |--------|--------|
-| Frame Rate | 60 FPS |
-| Gesture Latency | < 50ms |
-| Particle Count | 5000-10000 |
-| Memory Usage | < 200MB |
+| 幀率 | 60 FPS |
+| 手勢延遲 | < 50ms |
+| 粒子數量 | 5000-10000 |
+| 記憶體使用 | < 200MB |
 
-## Contributing
+## 貢獻
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. Fork 此專案
+2. 建立功能分支（`git checkout -b feature/amazing-feature`）
+3. 提交變更（`git commit -m 'Add amazing feature'`）
+4. 推送到分支（`git push origin feature/amazing-feature`）
+5. 開啟 Pull Request
 
-## License
+## 授權
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+本專案採用 MIT 授權 - 詳見 [LICENSE](LICENSE) 檔案。
 
-## Acknowledgments
+## 致謝
 
-- [Three.js](https://threejs.org/) - 3D graphics library
-- [MediaPipe](https://mediapipe.dev/) - Hand tracking solution
-- Inspired by creative coding and interactive art projects
+- [Three.js](https://threejs.org/) - 3D 圖形函式庫
+- [MediaPipe](https://mediapipe.dev/) - 手部追蹤解決方案
+- 靈感來自創意程式設計與互動藝術專案

@@ -18,7 +18,7 @@ export class TemplateSelector {
     this.container.innerHTML = `
       <div class="template-selector ${this.isCollapsed ? 'collapsed' : ''}">
         <div class="panel-header" role="button" tabindex="0">
-          <h3 class="panel-title">Templates</h3>
+          <h3 class="panel-title">模板</h3>
           <span class="collapse-icon">${this.isCollapsed ? '▶' : '▼'}</span>
         </div>
         <div class="panel-content template-grid">

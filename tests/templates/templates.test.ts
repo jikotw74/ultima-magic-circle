@@ -254,13 +254,13 @@ describe('Templates', () => {
     it('should generate circular ring structure', () => {
       const positions = magicCircleTemplate.generate(1000);
 
-      // 魔法陣主要是平面結構，Y 值應該很小
+      // 魔法陣面向螢幕（XY 平面），Z 值應該很小
       let flatParticles = 0;
 
       for (let i = 0; i < 1000; i++) {
-        const y = positions[i * 3 + 1];
-        // 平面粒子 Y 值在 -0.2 到 0.2 之間
-        if (Math.abs(y) < 0.2) {
+        const z = positions[i * 3 + 2];
+        // 平面粒子 Z 值在 -0.2 到 0.2 之間
+        if (Math.abs(z) < 0.2) {
           flatParticles++;
         }
       }
@@ -272,16 +272,16 @@ describe('Templates', () => {
     it('should generate radially symmetric distribution', () => {
       const positions = magicCircleTemplate.generate(1000);
 
-      // 檢查徑向分佈
+      // 檢查徑向分佈（XY 平面）
       let quadrant1 = 0, quadrant2 = 0, quadrant3 = 0, quadrant4 = 0;
 
       for (let i = 0; i < 1000; i++) {
         const x = positions[i * 3];
-        const z = positions[i * 3 + 2];
+        const y = positions[i * 3 + 1];
 
-        if (x >= 0 && z >= 0) quadrant1++;
-        else if (x < 0 && z >= 0) quadrant2++;
-        else if (x < 0 && z < 0) quadrant3++;
+        if (x >= 0 && y >= 0) quadrant1++;
+        else if (x < 0 && y >= 0) quadrant2++;
+        else if (x < 0 && y < 0) quadrant3++;
         else quadrant4++;
       }
 

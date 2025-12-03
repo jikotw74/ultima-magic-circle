@@ -61,8 +61,29 @@ export class GestureController {
 
     try {
       // Dynamically import MediaPipe
-      const { Hands } = await import('@mediapipe/hands');
-      const { Camera } = await import('@mediapipe/camera_utils');
+      // Handle both ESM named exports and CommonJS/UMD default exports
+      const handsModule = await import('@mediapipe/hands');
+      const cameraModule = await import('@mediapipe/camera_utils');
+
+      // MediaPipe packages may export as named exports or as default export
+      // depending on the bundler configuration
+      const Hands =
+        handsModule.Hands ||
+        (handsModule as unknown as { default: { Hands: typeof handsModule.Hands } }).default?.Hands;
+      const Camera =
+        cameraModule.Camera ||
+        (cameraModule as unknown as { default: { Camera: typeof cameraModule.Camera } }).default?.Camera;
+
+      if (!Hands) {
+        throw new Error(
+          'Failed to load MediaPipe Hands. The module structure is unexpected.'
+        );
+      }
+      if (!Camera) {
+        throw new Error(
+          'Failed to load MediaPipe Camera. The module structure is unexpected.'
+        );
+      }
 
       // Initialize MediaPipe Hands
       this.hands = new Hands({

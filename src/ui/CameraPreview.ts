@@ -9,6 +9,7 @@ export class CameraPreview {
   private animationId: number | null = null;
   private _gestureState: GestureState | null = null;
   private _handsDetectedCount: number = 0;
+  private hasStartedStreaming: boolean = false;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -62,7 +63,8 @@ export class CameraPreview {
 
   setVideoSource(video: HTMLVideoElement): void {
     this.videoElement = video;
-    this.updateStatus('active', 'Camera active');
+    this.hasStartedStreaming = false;
+    this.updateStatus('inactive', 'Connecting...');
     this.startRendering();
   }
 
@@ -71,17 +73,33 @@ export class CameraPreview {
 
     const render = () => {
       if (this.videoElement && this.ctx && this.canvas && this.isVisible) {
-        // Mirror the video
-        this.ctx.save();
-        this.ctx.scale(-1, 1);
-        this.ctx.drawImage(
-          this.videoElement,
-          -this.canvas.width,
-          0,
-          this.canvas.width,
-          this.canvas.height
-        );
-        this.ctx.restore();
+        // Check if video is ready to be drawn
+        // readyState >= 2 means HAVE_CURRENT_DATA (enough data for current frame)
+        // Also check videoWidth/videoHeight for mobile compatibility
+        const isVideoReady =
+          this.videoElement.readyState >= 2 &&
+          this.videoElement.videoWidth > 0 &&
+          this.videoElement.videoHeight > 0;
+
+        if (isVideoReady) {
+          // Update status to active when video actually starts streaming
+          if (!this.hasStartedStreaming) {
+            this.hasStartedStreaming = true;
+            this.updateStatus('active', 'Camera active');
+          }
+
+          // Mirror the video
+          this.ctx.save();
+          this.ctx.scale(-1, 1);
+          this.ctx.drawImage(
+            this.videoElement,
+            -this.canvas.width,
+            0,
+            this.canvas.width,
+            this.canvas.height
+          );
+          this.ctx.restore();
+        }
       }
       this.animationId = requestAnimationFrame(render);
     };

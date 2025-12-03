@@ -11,9 +11,7 @@ import { distance2D, calculateCenter, smoothValue, clamp } from '@/utils/math';
 // MediaPipe landmark indices
 const WRIST = 0;
 const THUMB_TIP = 4;
-const THUMB_IP = 3;
 const INDEX_TIP = 8;
-const INDEX_DIP = 7;
 const MIDDLE_TIP = 12;
 const RING_TIP = 16;
 const PINKY_TIP = 20;

@@ -41,6 +41,10 @@ export class GestureIndicator {
             </div>
             <span class="metric-value expansion-value">0%</span>
           </div>
+          <div class="metric ok-sign-indicator">
+            <span class="metric-label">OK 發亮</span>
+            <span class="ok-sign-status">👌 --</span>
+          </div>
         </div>
       </div>
     `;
@@ -56,7 +60,7 @@ export class GestureIndicator {
       const status = leftHand.querySelector('.hand-status');
       if (status) {
         if (state.leftHand) {
-          status.textContent = state.leftHand.isOpen ? '張開' : state.leftHand.isClosed ? '握拳' : '部分';
+          status.textContent = this.getHandStatusText(state.leftHand);
         } else {
           status.textContent = '--';
         }
@@ -70,7 +74,7 @@ export class GestureIndicator {
       const status = rightHand.querySelector('.hand-status');
       if (status) {
         if (state.rightHand) {
-          status.textContent = state.rightHand.isOpen ? '張開' : state.rightHand.isClosed ? '握拳' : '部分';
+          status.textContent = this.getHandStatusText(state.rightHand);
         } else {
           status.textContent = '--';
         }
@@ -103,6 +107,29 @@ export class GestureIndicator {
     if (expansionFill && expansionValue) {
       expansionFill.style.width = `${state.expansion * 100}%`;
       expansionValue.textContent = `${Math.round(state.expansion * 100)}%`;
+    }
+
+    // Update OK sign indicator
+    const okSignIndicator = this.container.querySelector('.ok-sign-indicator');
+    const okSignStatus = this.container.querySelector('.ok-sign-status');
+    if (okSignIndicator && okSignStatus) {
+      okSignIndicator.classList.toggle('active', state.hasOkSign);
+      okSignStatus.textContent = state.hasOkSign ? '👌 發亮中!' : '👌 --';
+    }
+  }
+
+  /**
+   * 取得手勢狀態文字
+   */
+  private getHandStatusText(hand: { isOpen: boolean; isClosed: boolean; isOkSign: boolean }): string {
+    if (hand.isOkSign) {
+      return 'OK';
+    } else if (hand.isOpen) {
+      return '張開';
+    } else if (hand.isClosed) {
+      return '握拳';
+    } else {
+      return '部分';
     }
   }
 

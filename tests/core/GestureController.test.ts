@@ -23,6 +23,7 @@ describe('GestureController', () => {
       expect(state.tension).toBe(0);
       expect(state.expansion).toBe(0);
       expect(state.isActive).toBe(false);
+      expect(state.hasOkSign).toBe(false);
     });
 
     it('should not be running initially', () => {

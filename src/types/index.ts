@@ -12,6 +12,7 @@ export interface HandState {
   landmarks: HandLandmark[];
   isOpen: boolean;
   isClosed: boolean;
+  isOkSign: boolean;  // OK 手勢 (大拇指和食指形成圓圈)
   openness: number;  // 0-1 scale (0 = closed fist, 1 = fully open)
   center: HandLandmark;
 }
@@ -23,10 +24,11 @@ export interface GestureState {
   tension: number;        // derived from openness average (0-1)
   expansion: number;      // derived from hands distance (0-1)
   isActive: boolean;      // at least one hand detected
+  hasOkSign: boolean;     // 任一手比出 OK 手勢
 }
 
 // Particle System Types
-export type TemplateType = 'heart' | 'flower' | 'saturn' | 'buddha' | 'fireworks';
+export type TemplateType = 'heart' | 'flower' | 'saturn' | 'buddha' | 'fireworks' | 'magicCircle';
 
 export interface ParticleConfig {
   count: number;
@@ -93,7 +95,7 @@ export interface MediaPipeHandsResults {
 }
 
 // Constants
-export const TEMPLATE_TYPES: TemplateType[] = ['heart', 'flower', 'saturn', 'buddha', 'fireworks'];
+export const TEMPLATE_TYPES: TemplateType[] = ['heart', 'flower', 'saturn', 'buddha', 'fireworks', 'magicCircle'];
 
 export const DEFAULT_PARTICLE_CONFIG: ParticleConfig = {
   count: 5000,

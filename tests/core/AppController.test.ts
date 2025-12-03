@@ -40,7 +40,8 @@ describe('AppController', () => {
       expect(TEMPLATE_TYPES).toContain('saturn');
       expect(TEMPLATE_TYPES).toContain('buddha');
       expect(TEMPLATE_TYPES).toContain('fireworks');
-      expect(TEMPLATE_TYPES).toHaveLength(5);
+      expect(TEMPLATE_TYPES).toContain('magicCircle');
+      expect(TEMPLATE_TYPES).toHaveLength(6);
     });
   });
 

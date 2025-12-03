@@ -10,6 +10,10 @@ export class CameraPreview {
   private _gestureState: GestureState | null = null;
   private _handsDetectedCount: number = 0;
   private hasStartedStreaming: boolean = false;
+  private cameraStarted: boolean = false;
+
+  // Callback for when user requests camera start
+  public onRequestCameraStart: (() => Promise<void>) | null = null;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -26,18 +30,25 @@ export class CameraPreview {
           </button>
         </div>
         <div class="camera-content">
-          <div class="camera-canvas-wrapper">
+          <div class="camera-start-prompt">
+            <button class="camera-start-btn" title="Start camera for hand gesture detection">
+              <span class="camera-icon">📷</span>
+              <span class="camera-start-text">Enable Camera</span>
+            </button>
+            <p class="camera-hint">Click to enable hand gesture control</p>
+          </div>
+          <div class="camera-canvas-wrapper" style="display: none;">
             <canvas class="camera-canvas"></canvas>
             <div class="hand-detection-overlay">
               <span class="hands-count">0</span>
               <span class="hands-label">hands</span>
             </div>
           </div>
-          <div class="camera-status">
+          <div class="camera-status" style="display: none;">
             <span class="status-indicator"></span>
             <span class="status-text">Initializing...</span>
           </div>
-          <div class="detection-feedback">
+          <div class="detection-feedback" style="display: none;">
             <div class="detection-item">
               <span class="detection-label">Detection:</span>
               <span class="detection-value" id="detection-status">Waiting...</span>
@@ -59,6 +70,57 @@ export class CameraPreview {
     if (toggleBtn) {
       toggleBtn.addEventListener('click', () => this.toggle());
     }
+
+    // Camera start button
+    const startBtn = this.container.querySelector('.camera-start-btn');
+    if (startBtn) {
+      startBtn.addEventListener('click', () => this.handleCameraStartClick());
+    }
+  }
+
+  private async handleCameraStartClick(): Promise<void> {
+    if (this.cameraStarted) return;
+
+    const startBtn = this.container.querySelector('.camera-start-btn') as HTMLButtonElement;
+    const startPrompt = this.container.querySelector('.camera-start-prompt') as HTMLElement;
+
+    if (startBtn) {
+      startBtn.disabled = true;
+      startBtn.querySelector('.camera-start-text')!.textContent = 'Starting...';
+    }
+
+    try {
+      if (this.onRequestCameraStart) {
+        await this.onRequestCameraStart();
+      }
+      this.cameraStarted = true;
+      this.showCameraView();
+    } catch (error) {
+      console.error('Failed to start camera:', error);
+      if (startBtn) {
+        startBtn.disabled = false;
+        startBtn.querySelector('.camera-start-text')!.textContent = 'Retry';
+      }
+      if (startPrompt) {
+        const hint = startPrompt.querySelector('.camera-hint');
+        if (hint) {
+          hint.textContent = 'Camera access denied or unavailable. Please allow camera access and try again.';
+          hint.classList.add('error');
+        }
+      }
+    }
+  }
+
+  private showCameraView(): void {
+    const startPrompt = this.container.querySelector('.camera-start-prompt') as HTMLElement;
+    const canvasWrapper = this.container.querySelector('.camera-canvas-wrapper') as HTMLElement;
+    const status = this.container.querySelector('.camera-status') as HTMLElement;
+    const feedback = this.container.querySelector('.detection-feedback') as HTMLElement;
+
+    if (startPrompt) startPrompt.style.display = 'none';
+    if (canvasWrapper) canvasWrapper.style.display = '';
+    if (status) status.style.display = '';
+    if (feedback) feedback.style.display = '';
   }
 
   setVideoSource(video: HTMLVideoElement): void {

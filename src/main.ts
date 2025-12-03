@@ -35,34 +35,18 @@ class App {
     // Initialize UI components
     this.initializeUI();
 
-    // Initialize and start
-    try {
-      await this.appController.initialize();
-
-      // Connect camera preview to video element
-      const videoElement = this.appController.getVideoElement();
-      if (videoElement && this.cameraPreview) {
-        this.cameraPreview.setVideoSource(videoElement);
-      }
-
-      // Set up gesture update listener
-      const gestureState = this.appController.getGestureState();
-      if (gestureState && this.gestureIndicator) {
-        this.gestureIndicator.update(gestureState);
-      }
-
-      // Poll for gesture updates (since we can't add listener after init)
-      this.startGesturePolling();
-
-    } catch (error) {
-      console.warn('Failed to initialize camera:', error);
-      if (this.cameraPreview) {
-        this.cameraPreview.setError('Camera unavailable');
-      }
+    // Set up camera start callback (triggered by user click)
+    if (this.cameraPreview) {
+      this.cameraPreview.onRequestCameraStart = async () => {
+        await this.initializeCamera();
+      };
     }
 
-    // Start animation
+    // Start animation (without camera - camera will be started by user interaction)
     this.appController.start();
+
+    // Start gesture polling (will show no hands until camera is started)
+    this.startGesturePolling();
 
     // Hide loading screen
     this.hideLoading();
@@ -157,6 +141,31 @@ class App {
       requestAnimationFrame(poll);
     };
     poll();
+  }
+
+  private async initializeCamera(): Promise<void> {
+    if (!this.appController) {
+      throw new Error('App controller not initialized');
+    }
+
+    try {
+      await this.appController.initialize();
+
+      // Connect camera preview to video element
+      const videoElement = this.appController.getVideoElement();
+      if (videoElement && this.cameraPreview) {
+        this.cameraPreview.setVideoSource(videoElement);
+      }
+
+      // Update gesture indicator with initial state
+      const gestureState = this.appController.getGestureState();
+      if (gestureState && this.gestureIndicator) {
+        this.gestureIndicator.update(gestureState);
+      }
+    } catch (error) {
+      console.error('Failed to initialize camera:', error);
+      throw error;
+    }
   }
 
   private hideLoading(): void {

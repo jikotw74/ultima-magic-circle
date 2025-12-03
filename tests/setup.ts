@@ -284,22 +284,31 @@ globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
 })) as unknown as typeof ResizeObserver;
 
 // Mock MediaPipe Hands
+// MediaPipe IIFE modules set their exports as window globals
+const MockHands = vi.fn().mockImplementation(() => ({
+  setOptions: vi.fn(),
+  onResults: vi.fn(),
+  send: vi.fn().mockResolvedValue(undefined),
+  close: vi.fn(),
+}));
+
+const MockCamera = vi.fn().mockImplementation(() => ({
+  start: vi.fn().mockResolvedValue(undefined),
+  stop: vi.fn(),
+}));
+
+// Set window globals for MediaPipe (this is how the real modules work)
+(globalThis as unknown as { Hands: unknown }).Hands = MockHands;
+(globalThis as unknown as { Camera: unknown }).Camera = MockCamera;
+
+// Also mock the imports for any code that might still use named exports
 vi.mock('@mediapipe/hands', () => ({
-  Hands: vi.fn().mockImplementation(() => ({
-    setOptions: vi.fn(),
-    onResults: vi.fn(),
-    send: vi.fn().mockResolvedValue(undefined),
-    close: vi.fn(),
-  })),
+  Hands: MockHands,
   HAND_CONNECTIONS: [],
 }));
 
-// Mock MediaPipe Camera Utils
 vi.mock('@mediapipe/camera_utils', () => ({
-  Camera: vi.fn().mockImplementation(() => ({
-    start: vi.fn().mockResolvedValue(undefined),
-    stop: vi.fn(),
-  })),
+  Camera: MockCamera,
 }));
 
 // Mock navigator.mediaDevices

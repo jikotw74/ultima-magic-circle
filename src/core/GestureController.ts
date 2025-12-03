@@ -61,27 +61,31 @@ export class GestureController {
 
     try {
       // Dynamically import MediaPipe
-      // Handle both ESM named exports and CommonJS/UMD default exports
-      const handsModule = await import('@mediapipe/hands');
-      const cameraModule = await import('@mediapipe/camera_utils');
+      // These packages are IIFE/UMD modules that set window.Hands and window.Camera
+      // when executed, rather than using ESM named exports
+      await import('@mediapipe/hands');
+      await import('@mediapipe/camera_utils');
 
-      // MediaPipe packages may export as named exports or as default export
-      // depending on the bundler configuration
-      const Hands =
-        handsModule.Hands ||
-        (handsModule as unknown as { default: { Hands: typeof handsModule.Hands } }).default?.Hands;
-      const Camera =
-        cameraModule.Camera ||
-        (cameraModule as unknown as { default: { Camera: typeof cameraModule.Camera } }).default?.Camera;
+      // MediaPipe IIFE modules set their exports as global window properties
+      const windowWithMediaPipe = window as unknown as {
+        Hands?: new (config: { locateFile: (file: string) => string }) => unknown;
+        Camera?: new (
+          video: HTMLVideoElement,
+          config: { onFrame: () => Promise<void>; width: number; height: number }
+        ) => unknown;
+      };
+
+      const Hands = windowWithMediaPipe.Hands;
+      const Camera = windowWithMediaPipe.Camera;
 
       if (!Hands) {
         throw new Error(
-          'Failed to load MediaPipe Hands. The module structure is unexpected.'
+          'Failed to load MediaPipe Hands. The module did not set window.Hands.'
         );
       }
       if (!Camera) {
         throw new Error(
-          'Failed to load MediaPipe Camera. The module structure is unexpected.'
+          'Failed to load MediaPipe Camera. The module did not set window.Camera.'
         );
       }
 
